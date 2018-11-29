@@ -13,6 +13,7 @@ public class GameOfLife extends Application {
     public void start(Stage primaryStage) throws Exception {
         System.out.println("Starting Game...");
         Controller controller = new Controller();
+        controller.controllerInit();
         controller.startLoop();
     }
 }

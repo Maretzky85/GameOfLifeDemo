@@ -2,7 +2,7 @@ package GameOfLife.Model;
 
 public class Dot {
 
-    private boolean alive = false;
+    private boolean alive = true;
 
     public boolean isAlive() {
         return alive;

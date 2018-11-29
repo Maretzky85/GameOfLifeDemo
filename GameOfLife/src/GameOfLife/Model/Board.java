@@ -14,13 +14,11 @@ public class Board {
     }
 
     private void initBoard(Dot[][] boardToInit) {
-//        System.out.print("Initialising Board");
-        for (int i = 0; i < boardToInit.length; i++) {
-            for (int j = 0; j < boardToInit[0].length; j++) {
-                boardToInit[i][j] = new Dot();
-            }
-        }
-//        System.out.print("  ...Done\n");
+//        for (int i = 0; i < boardToInit.length; i++) {
+//            for (int j = 0; j < boardToInit[0].length; j++) {
+//                boardToInit[i][j] = new Dot();
+//            }
+//        }
     }
 
     public Dot[][] getBoard() {
@@ -30,20 +28,38 @@ public class Board {
     public void nextGen() {
 
         Dot[][] tempBoard = newEmptyBoard();
+        Dot dotToCopy = null;
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-
+                int aliveNeighbors = getNeighbors(j, i);
                 Dot currentSourceDot = board[i][j];
                 Dot currentDestDot = tempBoard[i][j];
-                int aliveNeighbors = getNeighbors(j, i);
 
-                if ((currentSourceDot.isAlive() && aliveNeighbors <= 3) && (currentSourceDot.isAlive() && aliveNeighbors >= 2)) {
-                    currentDestDot.toggleStatus();
+                if ((currentSourceDot != null && aliveNeighbors <= 3) && aliveNeighbors >= 2) {
+                    tempBoard[i][j] = currentSourceDot;
+                } else if (currentDestDot == null && aliveNeighbors == 3) {
+                    tempBoard[i][j] = new Dot();
                 }
-                if (!currentSourceDot.isAlive() && aliveNeighbors == 3) {
-                    currentDestDot.toggleStatus();
-                }
+
+//                try {
+//                    currentSourceDot = board[i][j].isAlive();
+//                    dotToCopy = board[i][j];
+//                }catch (NullPointerException exeption){
+//                    currentSourceDot = false;
+//                }
+//
+//                Dot currentDestDot = tempBoard[i][j];
+//                int aliveNeighbors = getNeighbors(j, i);
+//
+//                if ((currentSourceDot && aliveNeighbors <= 3) && (currentSourceDot && aliveNeighbors >= 2)) {
+//                    currentDestDot = dotToCopy;
+////                    currentDestDot.toggleStatus();
+//                }
+//                if (!currentSourceDot && aliveNeighbors == 3) {
+//                    currentDestDot = dotToCopy;
+////                    currentDestDot.toggleStatus();
+//                }
             }
         }
         this.board = tempBoard;
@@ -52,9 +68,7 @@ public class Board {
     private Dot[][] newEmptyBoard() {
         int xLength = board[0].length;
         int yLength = board.length;
-        Dot[][] tempBoard = new Dot[yLength][xLength];
-        initBoard(tempBoard);
-        return tempBoard;
+        return new Dot[yLength][xLength];
 
     }
 
@@ -63,13 +77,14 @@ public class Board {
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 try {
-                    if (board[x + i][y + j].isAlive() && !(i == 0 && j == 0)) {
+                    if (board[x + i][y + j] != null && !(i == 0 && j == 0)) {
                         neighbors++;
                     }
                 } catch (ArrayIndexOutOfBoundsException ignored) {
                 }
             }
         }
+//        System.out.println("X,Y: "+x+" "+y+" "+ "N: "+neighbors);
         return neighbors;
     }
 }

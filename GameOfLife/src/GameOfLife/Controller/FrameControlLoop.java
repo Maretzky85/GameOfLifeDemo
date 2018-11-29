@@ -31,6 +31,7 @@ public class FrameControlLoop extends Thread {
             if (timeCounterMs >= timeFrame) {
                 updater.run();
 //                System.out.println("Frame: " + frame);
+//                System.out.println("FPS: " + FPS);
                 tics += 1;
                 frame++;
                 timeCounterMs = 0;
