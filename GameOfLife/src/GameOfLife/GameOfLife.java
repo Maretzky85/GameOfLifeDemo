@@ -8,7 +8,6 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 
 public class GameOfLife extends Application {
-    private static boolean startExampleModels = false;
 
     public static void main(String[] args) {
         if (args.length > 0) {
@@ -21,14 +20,17 @@ public class GameOfLife extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         System.out.println("Starting Game...");
-        Controller controller = new Controller();
-        controller.controllerInit();
-        if (startExampleModels) {
-            controller.initExampleBoard();
+        try {
+            Controller controller = new Controller();
+            controller.controllerInit();
+            controller.startLoop();
+        } catch (Exception e) {
+            System.out.println("Internal program error");
+            System.exit(404);
         }
-        controller.startLoop();
+
     }
 
     private static void handleArgs(String[] args) {
@@ -38,13 +40,23 @@ public class GameOfLife extends Application {
                     Config.setConsoleView(false);
                     break;
                 case "-e":
-                    startExampleModels = true;
+                    Config.toggleStartExampleModels();
+                    break;
+                case "-c":
+                    Config.setConsoleView(true);
+                    break;
+                case "-h":
+                    SettingsMenu.showHelp();
+                    Platform.exit();
                     break;
                 default:
                     System.out.println("Illegal argument\n" +
                             "List of available arguments:\n" +
-                            "-w - start app in window with default configuration");
-                    Platform.exit();
+                            "-w - start app in window with default configuration" +
+                            "-e - start app with example models" +
+                            "-c - start app with console output" +
+                            "-h - display help");
+                    System.exit(0);
                     break;
             }
         }

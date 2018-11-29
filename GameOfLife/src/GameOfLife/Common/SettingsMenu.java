@@ -26,7 +26,9 @@ public class SettingsMenu {
             System.out.println("SettingsMenu:\n" +
                     "1: View menu\n" +
                     "2: Game options menu\n" +
-                    "0: Quit and start game");
+                    "3: Display Help\n" +
+                    "9: Quit\n" +
+                    "0: Quit menu and start game");
             switch (scanner.nextInt()) {
                 case 1:
                     viewMenu();
@@ -34,11 +36,17 @@ public class SettingsMenu {
                 case 2:
                     gameMenu();
                     break;
+                case 3:
+                    showHelp();
+                    break;
+                case 9:
+                    System.exit(0);
+                    break;
                 case 0:
                     choice = 0;
                     break;
                 default:
-                    System.out.print("Invalid option");
+                    System.out.print("Invalid option\n");
                     scanner.nextLine();
                     break;
             }
@@ -54,6 +62,7 @@ public class SettingsMenu {
                     "1: Set board X size - " + Config.getxSize() + "\n" +
                     "2: Set board Y size - " + Config.getySize() + "\n" +
                     "3: Set speed (FPS) - " + Config.getFrameRate() + "\n" +
+                    "4: Set example board on start - " + Config.isStartExampleModels() + "\n" +
                     "0: Return");
             switch (scanner.nextInt()) {
                 case 1:
@@ -80,12 +89,16 @@ public class SettingsMenu {
                     System.out.println("Desired FPS set to: " + requestedFPS + "\n");
                     scanner.nextLine();
                     break;
-                default:
-                    System.out.print("Invalid option");
-                    scanner.nextLine();
+                case 4:
+                    Config.toggleStartExampleModels();
+                    clearScreen();
                     break;
                 case 0:
                     choice = 0;
+                    break;
+                default:
+                    System.out.print("Invalid option");
+                    scanner.nextLine();
                     break;
             }
         }
@@ -128,13 +141,13 @@ public class SettingsMenu {
                     break;
                 case 4:
                     System.out.println("Please enter requested window width");
-                    int widthinput = scanner.nextInt();
-                    if (!Config.setRequestedWindowWidth(widthinput)) {
+                    int widthInput = scanner.nextInt();
+                    if (!Config.setRequestedWindowWidth(widthInput)) {
                         System.out.println("Press enter to continue");
                         String temp = scanner.nextLine();
                     } else {
                         clearScreen();
-                        System.out.println("Set Window height to " + widthinput + "\n");
+                        System.out.println("Set Window height to " + widthInput + "\n");
                         scanner.nextLine();
                     }
                     break;
@@ -143,6 +156,24 @@ public class SettingsMenu {
                     break;
             }
         }
+    }
+
+    public static void showHelp() {
+        System.out.println("Usage:\n" +
+                "Console view - console view is for viewing only - there is no input method - quit with ctr(cmd) + c\n" +
+                "Example usage GameOfLife.GameOfLife -c -e\n" +
+                "JavaFX view:\n" +
+                "-Mouse:\n" +
+                "--Left key - change dot state\n" +
+                "--Right key - toggle pause\n" +
+                "-Keyboard input:\n" +
+                "-- Keys 1 - 9 - set different set of rules. 1 - standard Conways Game Of Life rules\n" +
+                "-- c - clears board\n" +
+                "-- n - places example dots on board\n" +
+                "-- + - increase requested speed\n" +
+                "-- - - decrease speed\n");
+        System.out.println("Press any key and enter to continue");
+        String temp = scanner.next();
     }
 
 

@@ -3,7 +3,7 @@ package GameOfLife.Common;
 import javafx.scene.paint.Color;
 
 public class Config {
-    public static double VERSION = 0.9;
+    public static double VERSION = 0.95;
     /**
      * CONSOLE_VIEW - console printing if true, JavaFX Window if false
      * for console view limit x and y for console size
@@ -26,6 +26,9 @@ public class Config {
     private static int REQUESTED_WINDOW_HEIGHT = 300;
 
     public static Color DEAD_COLOR = Color.BLACK;
+
+    private static boolean startExampleModels = false;
+
     /**
      * DO NOT EDIT!!!!
      * configuration for matching JavaFX Window for board size
@@ -34,15 +37,14 @@ public class Config {
      */
     public static int RECTANGLE_WIDTH = Math.max(1, Math.floorDiv(REQUESTED_WINDOW_WIDTH, X_SIZE));
     public static int RECTANGLE_HEIGHT = Math.max(1, Math.floorDiv(REQUESTED_WINDOW_HEIGHT, Y_SIZE));
-
     public static int WIDTH = RECTANGLE_WIDTH * X_SIZE;
+
     public static int HEIGHT = RECTANGLE_HEIGHT * Y_SIZE;
 
     /*
     =============================================================================
     setters and getters for console menu
      */
-
     public static void setConsoleView(boolean consoleView) {
         CONSOLE_VIEW = consoleView;
     }
@@ -51,16 +53,16 @@ public class Config {
         X_SIZE = xSize;
         if (REQUESTED_WINDOW_WIDTH < X_SIZE) {
             REQUESTED_WINDOW_WIDTH = X_SIZE;
-            resize();
         }
+        resize();
     }
 
     static void setySize(int ySize) {
         Y_SIZE = ySize;
         if (REQUESTED_WINDOW_HEIGHT < Y_SIZE) {
             REQUESTED_WINDOW_HEIGHT = Y_SIZE;
-            resize();
         }
+        resize();
     }
 
     static void setFrameRate(int frameRate) {
@@ -93,6 +95,10 @@ public class Config {
         return ok;
     }
 
+    public static void toggleStartExampleModels() {
+        Config.startExampleModels = !Config.startExampleModels;
+    }
+
     private static void resize() {
         RECTANGLE_WIDTH = Math.max(1, Math.floorDiv(REQUESTED_WINDOW_WIDTH, X_SIZE));
         WIDTH = RECTANGLE_WIDTH * X_SIZE;
@@ -122,5 +128,9 @@ public class Config {
 
     static int getRequestedWindowHeight() {
         return REQUESTED_WINDOW_HEIGHT;
+    }
+
+    public static boolean isStartExampleModels() {
+        return startExampleModels;
     }
 }

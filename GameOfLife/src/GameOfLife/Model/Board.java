@@ -17,11 +17,6 @@ public class Board {
         this.board = new Dot[y][x];
     }
 
-
-    public Dot[][] getBoard() {
-        return board;
-    }
-
     public void nextGen() {
 
         Dot[][] tempBoard = newEmptyBoard();
@@ -41,6 +36,10 @@ public class Board {
             }
         }
         this.board = tempBoard;
+    }
+
+    public Dot[][] getBoard() {
+        return board;
     }
 
     private Dot[][] newEmptyBoard() {
@@ -64,11 +63,11 @@ public class Board {
         return neighbors;
     }
 
-    public void updateOnPosition(int x, int y) {
-        if (getBoard()[y][x] == null) {
-            getBoard()[y][x] = new Dot();
+    public void changeOnPosition(int x, int y) {
+        if (board[y][x] == null) {
+            board[y][x] = new Dot();
         } else {
-            getBoard()[y][x] = null;
+            board[y][x] = null;
         }
     }
 
@@ -79,16 +78,50 @@ public class Board {
     public void setRules(int i) {
         switch (i) {
             case 1:
+                System.out.println("Conway`s Game of Life rules");
                 ruleToLive = new int[]{2, 3};
                 ruleToGetAlive = new int[]{3};
                 break;
             case 2:
+                System.out.println("HighLife 23/36 rule");
+                ruleToLive = new int[]{2, 3};
+                ruleToGetAlive = new int[]{3, 6};
+                break;
+            case 3:
+                System.out.println("345/345 rule");
                 ruleToGetAlive = new int[]{3, 4, 5};
                 ruleToGetAlive = new int[]{3, 4, 5};
                 break;
-            case 3:
+            case 4:
+                System.out.println("Motion 234/368 rule");
                 ruleToLive = new int[]{2, 4, 5};
                 ruleToGetAlive = new int[]{3, 6, 8};
+                break;
+            case 5:
+                System.out.println("Replicator 1357/1357 rule");
+                ruleToLive = new int[]{1, 3, 5, 7};
+                ruleToGetAlive = new int[]{1, 3, 5, 7};
+                break;
+            case 6:
+                System.out.println("Labirynt 12345/3 rule");
+                ruleToLive = new int[]{1, 2, 3, 4, 5};
+                ruleToGetAlive = new int[]{3};
+                break;
+            case 7:
+                System.out.println("traycloth /234 rule");
+                ruleToLive = new int[]{};
+                ruleToGetAlive = new int[]{2, 3, 4};
+                break;
+            case 8:
+                System.out.println("Leafs 012345678/3 rule");
+                ruleToLive = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
+                ruleToGetAlive = new int[]{3};
+                break;
+            case 9:
+                System.out.println("Wolfram - 7(e) 012345678/1 rule");
+                ruleToLive = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
+                ruleToGetAlive = new int[]{1};
+                break;
             default:
                 break;
         }

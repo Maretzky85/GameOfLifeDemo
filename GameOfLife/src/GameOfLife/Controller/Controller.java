@@ -1,6 +1,7 @@
 package GameOfLife.Controller;
 
 import GameOfLife.Common.BoardTooSmallException;
+import GameOfLife.Common.Config;
 import GameOfLife.Model.Board;
 import GameOfLife.View.ConsoleView;
 import GameOfLife.View.JavaFXView;
@@ -29,6 +30,9 @@ public class Controller implements Observer {
 
         System.out.print("Initialising model");
         model = new Board(Y_SIZE, X_SIZE);
+        if (Config.isStartExampleModels()) {
+            model.initExampleBoard();
+        }
         System.out.print(" ...done. Took " + (System.currentTimeMillis() - startTime) + " ms\n");
 
         System.out.print("Initialising GameOfLife.View...");
@@ -56,26 +60,25 @@ public class Controller implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        boolean argIsPosition = false;
+        boolean argIsPosition = true;
+        boolean argIsint = true;
         try {
             int[] position = (int[]) arg;
-            argIsPosition = true;
-            model.updateOnPosition(position[0], position[1]);
+            model.changeOnPosition(position[0], position[1]);
         } catch (ClassCastException ignored) {
+            argIsPosition = false;
         }
 
-        if (!argIsPosition) try {
+        try {
+            int option = Integer.valueOf(arg.toString());
+            model.setRules(option);
+        } catch (NumberFormatException ignored) {
+            argIsint = false;
+        }
+
+        if (!argIsPosition && !argIsint) try {
             String key = (String) arg;
             switch (key) {
-                case "1":
-                    model.setRules(1);
-                    break;
-                case "2":
-                    model.setRules(2);
-                    break;
-                case "3":
-                    model.setRules(3);
-                    break;
                 case "p":
                     loop.togglePause();
                     break;
