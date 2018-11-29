@@ -1,13 +1,11 @@
 package GameOfLife.Controller;
 
-import GameOfLife.Common.BoardTooSmallExeption;
+import GameOfLife.Common.BoardTooSmallException;
 import GameOfLife.Model.Board;
-import GameOfLife.Model.Dot;
 import GameOfLife.View.ConsoleView;
 import GameOfLife.View.JavaFXView;
 import GameOfLife.View.ViewInterface;
 
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -24,7 +22,7 @@ public class Controller implements Observer {
 
     }
 
-    public void controllerInit() throws BoardTooSmallExeption {
+    public void controllerInit() throws BoardTooSmallException {
 
 
         long startTime = System.currentTimeMillis();
@@ -45,35 +43,63 @@ public class Controller implements Observer {
 
         loop = new FrameControlLoop(this::updateModel);
 
-        initDots();
-
         view.viewInit();
         if (!CONSOLE_VIEW) {
             loop.setDaemon(true);
             view.attachObserver(this);
+            view.refresh(model);
+        } else {
+            loop.togglePause();
         }
 
     }
 
     @Override
     public void update(Observable o, Object arg) {
-
-        Map data = (Map) arg;
-        if (data.get("target").equals("model")) {
-            model.updateOnPosition((int) data.get("X"), (int) data.get("Y"));
-        } else if (data.get("target").equals("control")) {
-            if (data.get("setting").equals("pause")) {
-                loop.togglePause();
-            }
-            if (data.get("setting").equals("increaseSpeed")) {
-                loop.increaseSpeed();
-            } else {
-                loop.decreaseSpeed();
-            }
+        boolean argIsPosition = false;
+        try {
+            int[] position = (int[]) arg;
+            argIsPosition = true;
+            model.updateOnPosition(position[0], position[1]);
+        } catch (ClassCastException ignored) {
         }
 
-
+        if (!argIsPosition) try {
+            String key = (String) arg;
+            switch (key) {
+                case "1":
+                    model.setRules(1);
+                    break;
+                case "2":
+                    model.setRules(2);
+                    break;
+                case "3":
+                    model.setRules(3);
+                    break;
+                case "p":
+                    loop.togglePause();
+                    break;
+                case "c":
+                    model.clearBoard();
+                    view.refresh(model);
+                    break;
+                case "n":
+                    model.initExampleBoard();
+                    view.refresh(model);
+                    break;
+                case "+":
+                    loop.increaseSpeed();
+                    break;
+                case "-":
+                    loop.decreaseSpeed();
+                    break;
+                default:
+                    break;
+            }
+        } catch (ClassCastException ignored) {
+        }
     }
+
 
     public void startLoop() {
         loop.start();
@@ -84,103 +110,7 @@ public class Controller implements Observer {
         view.refresh(model);
     }
 
-    private void initDots() {
-        int xOffset = 100;
-        int yOffset = 30;
-        int x2Offset = 80;
-        int y2Offset = 100;
-        int x3Offset = 0;
-        int y3Offset = 0;
-
-        //Box
-//        model.getBoard()[2][1] = new Dot();
-//        model.getBoard()[2][2] = new Dot();
-//        model.getBoard()[3][1] = new Dot();
-//        model.getBoard()[3][2] = new Dot();
-
-
-        //        Glider
-        model.getBoard()[2 + y3Offset][2 + x3Offset] = new Dot();
-        model.getBoard()[2 + y3Offset][3 + x3Offset] = new Dot();
-        model.getBoard()[2 + y3Offset][1 + x3Offset] = new Dot();
-        model.getBoard()[1 + y3Offset][3 + x3Offset] = new Dot();
-        model.getBoard()[0 + y3Offset][2 + x3Offset] = new Dot();
-
-//        something
-        model.getBoard()[8 + x2Offset][1 + y2Offset] = new Dot();
-        model.getBoard()[8 + x2Offset][3 + y2Offset] = new Dot();
-        model.getBoard()[7 + x2Offset][3 + y2Offset] = new Dot();
-        model.getBoard()[6 + x2Offset][5 + y2Offset] = new Dot();
-        model.getBoard()[5 + x2Offset][5 + y2Offset] = new Dot();
-        model.getBoard()[4 + x2Offset][5 + y2Offset] = new Dot();
-        model.getBoard()[5 + x2Offset][7 + y2Offset] = new Dot();
-        model.getBoard()[4 + x2Offset][7 + y2Offset] = new Dot();
-        model.getBoard()[3 + x2Offset][7 + y2Offset] = new Dot();
-        model.getBoard()[4 + x2Offset][8 + y2Offset] = new Dot();
-
-//        GliderGun
-        model.getBoard()[8 + xOffset][1 + yOffset] = new Dot();
-        model.getBoard()[7 + xOffset][1 + yOffset] = new Dot();
-        model.getBoard()[8 + xOffset][2 + yOffset] = new Dot();
-        model.getBoard()[7 + xOffset][2 + yOffset] = new Dot();
-
-        model.getBoard()[8 + xOffset][12 + yOffset] = new Dot();
-        model.getBoard()[7 + xOffset][12 + yOffset] = new Dot();
-        model.getBoard()[6 + xOffset][12 + yOffset] = new Dot();
-
-        model.getBoard()[9 + xOffset][13 + yOffset] = new Dot();
-        model.getBoard()[5 + xOffset][13 + yOffset] = new Dot();
-
-        model.getBoard()[4 + xOffset][14 + yOffset] = new Dot();
-        model.getBoard()[10 + xOffset][14 + yOffset] = new Dot();
-
-        model.getBoard()[5 + xOffset][15 + yOffset] = new Dot();
-        model.getBoard()[9 + xOffset][15 + yOffset] = new Dot();
-
-        model.getBoard()[8 + xOffset][16 + yOffset] = new Dot();
-        model.getBoard()[7 + xOffset][16 + yOffset] = new Dot();
-        model.getBoard()[6 + xOffset][16 + yOffset] = new Dot();
-
-        model.getBoard()[8 + xOffset][17 + yOffset] = new Dot();
-        model.getBoard()[7 + xOffset][17 + yOffset] = new Dot();
-        model.getBoard()[6 + xOffset][17 + yOffset] = new Dot();
-
-        model.getBoard()[6 + xOffset][22 + yOffset] = new Dot();
-        model.getBoard()[5 + xOffset][22 + yOffset] = new Dot();
-        model.getBoard()[4 + xOffset][22 + yOffset] = new Dot();
-
-        model.getBoard()[3 + xOffset][23 + yOffset] = new Dot();
-        model.getBoard()[4 + xOffset][23 + yOffset] = new Dot();
-        model.getBoard()[6 + xOffset][23 + yOffset] = new Dot();
-        model.getBoard()[7 + xOffset][23 + yOffset] = new Dot();
-
-        model.getBoard()[3 + xOffset][24 + yOffset] = new Dot();
-        model.getBoard()[4 + xOffset][24 + yOffset] = new Dot();
-        model.getBoard()[6 + xOffset][24 + yOffset] = new Dot();
-        model.getBoard()[7 + xOffset][24 + yOffset] = new Dot();
-
-        model.getBoard()[3 + xOffset][25 + yOffset] = new Dot();
-        model.getBoard()[4 + xOffset][25 + yOffset] = new Dot();
-        model.getBoard()[5 + xOffset][25 + yOffset] = new Dot();
-        model.getBoard()[6 + xOffset][25 + yOffset] = new Dot();
-        model.getBoard()[7 + xOffset][25 + yOffset] = new Dot();
-
-        model.getBoard()[2 + xOffset][26 + yOffset] = new Dot();
-        model.getBoard()[3 + xOffset][26 + yOffset] = new Dot();
-        model.getBoard()[7 + xOffset][26 + yOffset] = new Dot();
-        model.getBoard()[8 + xOffset][26 + yOffset] = new Dot();
-
-        model.getBoard()[3 + xOffset][31 + yOffset] = new Dot();
-        model.getBoard()[4 + xOffset][31 + yOffset] = new Dot();
-
-        model.getBoard()[5 + xOffset][35 + yOffset] = new Dot();
-        model.getBoard()[6 + xOffset][35 + yOffset] = new Dot();
-        model.getBoard()[5 + xOffset][36 + yOffset] = new Dot();
-        model.getBoard()[6 + xOffset][36 + yOffset] = new Dot();
-
-
-//        model.getBoard()[4][18] = new Dot();
-//        model.getBoard()[10][18] = new Dot();
+    public void initExampleBoard() {
+        model.initExampleBoard();
     }
-
 }

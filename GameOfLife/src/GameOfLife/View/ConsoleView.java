@@ -3,9 +3,10 @@ package GameOfLife.View;
 import GameOfLife.Controller.Controller;
 import GameOfLife.Model.Board;
 
+
 public class ConsoleView implements ViewInterface {
 
-    private static void clearScreen() {
+    private void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
@@ -13,6 +14,7 @@ public class ConsoleView implements ViewInterface {
     @Override
     public void viewInit() {
         clearScreen();
+
     }
 
     @Override
@@ -23,7 +25,7 @@ public class ConsoleView implements ViewInterface {
             System.out.println();
             for (int j = 0; j < board.getBoard()[0].length; j++) {
                 if (board.getBoard()[i][j] == null) {
-                    System.out.print("-");
+                    System.out.print(" ");
                 } else {
                     System.out.print(board.getBoard()[i][j]);
                 }
@@ -35,8 +37,7 @@ public class ConsoleView implements ViewInterface {
     }
 
     @Override
-    public void attachObserver(Controller controller) {
-        //ignore
+    public void attachObserver(Controller ignore) {
     }
 
 }

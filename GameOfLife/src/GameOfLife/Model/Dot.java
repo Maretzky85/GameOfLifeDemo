@@ -16,7 +16,9 @@ public class Dot {
     }
 
     public int getGeneration() {
-        generation++;
+        if (generation < 255) {
+            generation++;
+        }
         return generation;
     }
 }
