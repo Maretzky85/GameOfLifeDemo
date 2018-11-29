@@ -1,14 +1,20 @@
 package GameOfLife;
 
-import GameOfLife.CommonUsage.Config;
-import GameOfLife.CommonUsage.SettingsMenu;
+import GameOfLife.Common.BoardTooSmallException;
+import GameOfLife.Common.Config;
+import GameOfLife.Common.SettingsMenu;
 import GameOfLife.Controller.Controller;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.stage.Stage;
 
 public class GameOfLife extends Application {
 
+    /**
+     *Entry point of application
+     * if no arguments is passed than views menu
+     *
+     * @param args - console arguments
+     */
     public static void main(String[] args) {
         if (args.length > 0) {
             handleArgs(args);
@@ -19,20 +25,26 @@ public class GameOfLife extends Application {
 
     }
 
+    /**
+     * start method for JavaFX Applications
+     * creates and init controller
+     *
+     * @param primaryStage - standard required for JavaFX App
+     * @throws BoardTooSmallException - if board is less than 5x5
+     */
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws BoardTooSmallException {
         System.out.println("Starting Game...");
-        try {
-            Controller controller = new Controller();
-            controller.controllerInit();
-            controller.startLoop();
-        } catch (Exception e) {
-            System.out.println("Internal program error");
-            System.exit(404);
-        }
-
+        Controller controller = new Controller();
+        controller.controllerInit(primaryStage);
+        controller.startLoop();
     }
 
+    /**
+     * handleArgs method for setting application before launch
+     *
+     * @param args - arguments from console call
+     */
     private static void handleArgs(String[] args) {
         for (String arg : args) {
             switch (arg) {
@@ -47,7 +59,7 @@ public class GameOfLife extends Application {
                     break;
                 case "-h":
                     SettingsMenu.showHelp();
-                    Platform.exit();
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Illegal argument\n" +

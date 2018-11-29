@@ -1,18 +1,17 @@
 package GameOfLife.Model;
 
+/**
+ * Dot Class
+ * holds number of generations lived
+ * overrides toString method for console output printing
+ */
 public class Dot {
-
-    private boolean alive = true;
 
     private int generation = 0;
 
     @Override
     public String toString() {
-        if (alive) {
-            return "*";
-        } else {
-            return " ";
-        }
+        return "*";
     }
 
     public int getGeneration() {

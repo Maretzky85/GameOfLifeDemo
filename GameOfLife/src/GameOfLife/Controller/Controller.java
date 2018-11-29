@@ -1,29 +1,45 @@
 package GameOfLife.Controller;
 
-import GameOfLife.CommonUsage.BoardTooSmallException;
-import GameOfLife.CommonUsage.Config;
+import GameOfLife.Common.BoardTooSmallException;
+import GameOfLife.Common.Config;
 import GameOfLife.Model.Board;
 import GameOfLife.View.ConsoleView;
 import GameOfLife.View.JavaFXView;
 import GameOfLife.View.ViewInterface;
+import javafx.stage.Stage;
 
 import java.util.Observable;
 import java.util.Observer;
 
-import static GameOfLife.CommonUsage.Config.*;
+import static GameOfLife.Common.Config.*;
 
+/**
+ * Controller class for GameOfLife implements Observer cass for receiving updates from JavaFX
+ * Have theoretical model(Board), View for drawing model and FrameControlLoop for
+ * controlling speed of updates for model and statistics drawing
+ */
 public class Controller implements Observer {
 
     private Board model;
     private ViewInterface view;
     private FrameControlLoop loop;
 
-
-    public Controller() {
-
-    }
-
-    public void controllerInit() throws BoardTooSmallException {
+    /**
+     * Initiates model with parameters specified in Config class
+     * Initiates view output
+     * Initiates FrameControlLoop with setting configured in Config class
+     * measure init time for modules
+     * <p>
+     * For console view - start without pause
+     * For JavaFX view - starts paused, sets loop thread as daemon
+     * <p>
+     * Initiates first view update for first frame draw
+     *
+     * @param primaryStage - primaryStage from main thread - for passing through if JavaFX View is selected
+     *
+     * @throws BoardTooSmallException - if board in config is too small, forces app to exit
+     */
+    public void controllerInit(Stage primaryStage) throws BoardTooSmallException {
 
 
         long startTime = System.currentTimeMillis();
@@ -35,12 +51,12 @@ public class Controller implements Observer {
         }
         System.out.print(" ...done. Took " + (System.currentTimeMillis() - startTime) + " ms\n");
 
-        System.out.print("Initialising GameOfLife.View...");
+        System.out.print("Initialising View...");
         startTime = System.currentTimeMillis();
         if (CONSOLE_VIEW) {
             view = new ConsoleView();
         } else {
-            view = new JavaFXView();
+            view = new JavaFXView(primaryStage);
         }
 
         System.out.print(" ...done. Took " + (System.currentTimeMillis() - startTime) + " ms\n");
@@ -49,16 +65,29 @@ public class Controller implements Observer {
         loop.attachStatisticTimer(this::showStatistics);
 
         view.viewInit();
+
         if (!CONSOLE_VIEW) {
             loop.setDaemon(true);
             view.attachObserver(this);
-            view.refresh(model);
+            view.refresh(model.getBoard());
         } else {
             loop.togglePause();
         }
 
     }
 
+
+    /**
+     * ***Only for JavaFX view
+     * Overriden method for updating model if input is received
+     *
+     *
+     * @param o - observable object( in this case InputHandler Class )
+     * @param arg - arguments for update:
+     *            int[] for board position update
+     *            int - for board rules update
+     *            String for speed control, pause, clear and insert example elements on board
+     */
     @Override
     public void update(Observable o, Object arg) {
         boolean argIsPosition = true;
@@ -85,11 +114,11 @@ public class Controller implements Observer {
                     break;
                 case "c":
                     model.clearBoard();
-                    view.refresh(model);
+                    view.refresh(model.getBoard());
                     break;
                 case "n":
                     model.initExampleBoard();
-                    view.refresh(model);
+                    view.refresh(model.getBoard());
                     break;
                 case "+":
                     loop.increaseSpeed();
@@ -104,16 +133,30 @@ public class Controller implements Observer {
         }
     }
 
-
+    /**
+     * startLoop
+     * method for FrameControlLoop start in new Thread
+     * called from outside class after init
+     */
     public void startLoop() {
         loop.start();
     }
 
+    /**
+     * updateState
+     * method for trigger next generation update
+     * for both model and than view
+     */
     private void updateState() {
         model.nextGen();
-        view.refresh(model);
+        view.refresh(model.getBoard());
     }
 
+    /**
+     * showStatistics
+     * method for printing out ( once per call ) FPS statistic
+     * gathered from FrameLoopControl and View(view avaible only for JavaFX)
+     */
     private void showStatistics() {
         if (Config.isPrintStatistics()) {
             System.out.println("Current model FPS: " + loop.getFPS() + "\nDropped View frames: " + view.getDroppedFrames() + "\n");

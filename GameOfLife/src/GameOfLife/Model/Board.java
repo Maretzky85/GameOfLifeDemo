@@ -1,15 +1,27 @@
 package GameOfLife.Model;
 
-import GameOfLife.CommonUsage.BoardTooSmallException;
+import GameOfLife.Common.BoardTooSmallException;
 
 import java.util.Arrays;
 
+/**
+ * Theoretical model for GameOfLife
+ * holds board that is 2d table that holds Dot or null
+ * holds rule to live to next generation and rule to get alive in net generation
+ */
 public class Board {
     private Dot[][] board;
 
     private int[] ruleToLive = new int[]{2, 3};
     private int[] ruleToGetAlive = new int[]{3};
 
+    /**
+     * Board constructor
+     *
+     * @param y - y size (height) of board (int)
+     * @param x - x size (width) of board (int)
+     * @throws BoardTooSmallException - forces app to exit if board size is too small
+     */
     public Board(int y, int x) throws BoardTooSmallException {
         if (x < 5 || y < 5) {
             throw new BoardTooSmallException("Board must be at least 5 x 5");
@@ -17,6 +29,11 @@ public class Board {
         this.board = new Dot[y][x];
     }
 
+    /**
+     * nextGen
+     * <p>
+     * Method for calculating new generation - depends on rule to live and rule to get alive
+     */
     public void nextGen() {
 
         Dot[][] tempBoard = newEmptyBoard();
@@ -26,11 +43,10 @@ public class Board {
 
                 int aliveNeighbors = getNeighbors(j, i);
                 Dot currentSourceDot = board[i][j];
-                Dot currentDestDot = tempBoard[i][j];
 
                 if (currentSourceDot != null && Arrays.stream(ruleToLive).anyMatch(value -> value == aliveNeighbors)) {
                     tempBoard[i][j] = currentSourceDot;
-                } else if ((currentDestDot == null && Arrays.stream(ruleToGetAlive).anyMatch(value -> value == aliveNeighbors))) {
+                } else if ((currentSourceDot == null && Arrays.stream(ruleToGetAlive).anyMatch(value -> value == aliveNeighbors))) {
                     tempBoard[i][j] = new Dot();
                 }
             }
@@ -38,22 +54,25 @@ public class Board {
         this.board = tempBoard;
     }
 
-    public Dot[][] getBoard() {
-        return board;
-    }
-
-    private Dot[][] newEmptyBoard() {
-        int xLength = board[0].length;
-        int yLength = board.length;
-        return new Dot[yLength][xLength];
-    }
-
-    private int getNeighbors(int y, int x) {
+    /**
+     * getNeighbors
+     *
+     * helper function for nextGen
+     *
+     * @param boardTargetXposition - boardYposition position on board
+     * @param boardTargetYposition - x position on board
+     * @return - returns existing ( not null) dots count around given x,boardYposition position
+     *           out of array bounds does not count as neighbor ( no-wrapping )
+     */
+    private int getNeighbors(int boardTargetXposition, int boardTargetYposition) {
         int neighbors = 0;
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
+        int leftOfDownThreshold = -1;
+        int rightOrUpTreshold = 1;
+        int thisPosition = 0;
+        for (int i = leftOfDownThreshold; i <= rightOrUpTreshold; i++) {
+            for (int j = leftOfDownThreshold; j <= rightOrUpTreshold; j++) {
                 try {
-                    if (board[x + i][y + j] != null && !(i == 0 && j == 0)) {
+                    if (board[boardTargetYposition + i][boardTargetXposition + j] != null && !(i == thisPosition && j == thisPosition)) {
                         neighbors++;
                     }
                 } catch (ArrayIndexOutOfBoundsException ignored) {
@@ -63,6 +82,29 @@ public class Board {
         return neighbors;
     }
 
+    /**
+     * newEmptyBoard
+     * <p>
+     * helper function for nextGen and clearBoard
+     *
+     * @return - returns empty board of size given in Config class
+     */
+    private Dot[][] newEmptyBoard() {
+        int xLength = board[0].length;
+        int yLength = board.length;
+        return new Dot[yLength][xLength];
+    }
+
+    /**
+     * changeOnPosition
+     *
+     * toggle state on boards given position
+     * if null - creates new Dot on given position
+     * if Dot - insert null instead
+     *
+     * @param x - x position on board
+     * @param y - y position on board
+     */
     public void changeOnPosition(int x, int y) {
         if (board[y][x] == null) {
             board[y][x] = new Dot();
@@ -71,10 +113,21 @@ public class Board {
         }
     }
 
+    /**
+     * clearBoard
+     *
+     * calls new EmptyBoard function and assign result to board
+     */
     public void clearBoard() {
         board = newEmptyBoard();
     }
 
+    /**
+     * setRules
+     * function to swap rules according to option ( given int )
+     *
+     * @param i - setting for rule number to apply
+     */
     public void setRules(int i) {
         switch (i) {
             case 1:
@@ -127,6 +180,12 @@ public class Board {
         }
     }
 
+    /**
+     * initExampleBoard
+     *
+     * function for placing example Dots on board defined in function
+     * if Dot position is out of board bounds - ignore ( does not place )
+     */
     public void initExampleBoard() {
         int xOffset = 0;
         int yOffset = 0;
@@ -141,18 +200,18 @@ public class Board {
             board[2 + y3Offset][1 + x3Offset] = new Dot();
             board[1 + y3Offset][3 + x3Offset] = new Dot();
             board[y3Offset][2 + x3Offset] = new Dot();
-
+//
 //        something
-            board[8 + x2Offset][1 + y2Offset] = new Dot();
-            board[8 + x2Offset][3 + y2Offset] = new Dot();
-            board[7 + x2Offset][3 + y2Offset] = new Dot();
-            board[6 + x2Offset][5 + y2Offset] = new Dot();
-            board[5 + x2Offset][5 + y2Offset] = new Dot();
-            board[4 + x2Offset][5 + y2Offset] = new Dot();
-            board[5 + x2Offset][7 + y2Offset] = new Dot();
-            board[4 + x2Offset][7 + y2Offset] = new Dot();
-            board[3 + x2Offset][7 + y2Offset] = new Dot();
-            board[4 + x2Offset][8 + y2Offset] = new Dot();
+//            board[8 + x2Offset][1 + y2Offset] = new Dot();
+//            board[8 + x2Offset][3 + y2Offset] = new Dot();
+//            board[7 + x2Offset][3 + y2Offset] = new Dot();
+//            board[6 + x2Offset][5 + y2Offset] = new Dot();
+//            board[5 + x2Offset][5 + y2Offset] = new Dot();
+//            board[4 + x2Offset][5 + y2Offset] = new Dot();
+//            board[5 + x2Offset][7 + y2Offset] = new Dot();
+//            board[4 + x2Offset][7 + y2Offset] = new Dot();
+//            board[3 + x2Offset][7 + y2Offset] = new Dot();
+//            board[4 + x2Offset][8 + y2Offset] = new Dot();
 
 //        GliderGun
 
@@ -215,5 +274,9 @@ public class Board {
         } catch (IndexOutOfBoundsException ignore) {
 
         }
+    }
+
+    public Dot[][] getBoard() {
+        return board;
     }
 }

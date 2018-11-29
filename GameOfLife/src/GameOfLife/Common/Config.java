@@ -1,10 +1,15 @@
-package GameOfLife.CommonUsage;
+package GameOfLife.Common;
 
 import javafx.scene.paint.Color;
 
 public class Config {
     public static double VERSION = 0.96;
 
+    /**
+     * Print statistics
+     * Set true for printing FPS statistics in 1 sec interval
+     * prints FPS for model calculations and view dropped frames
+     */
     private static boolean printStatistics = false;
 
     /**
@@ -13,22 +18,29 @@ public class Config {
      */
     public static boolean CONSOLE_VIEW = false;
     /**
-     * X_SIZE and Y_SIZE - size of grid for GameOfLife.GameOfLife board
+     * X_SIZE and Y_SIZE - size of grid for GameOfLife board
      * FRAME_RATE - how many generations to render in one second
      */
-    public static int X_SIZE = 100;
-    public static int Y_SIZE = 100;
+    public static int X_SIZE = 80;
+    public static int Y_SIZE = 40;
     public static int FRAME_RATE = 20;
 
     /**
-     * JavaFX Configuration
+     * JavaFX window size configuration
      * DEAD_COLOR - color for inactive Dot
      */
     private static int REQUESTED_WINDOW_WIDTH = 400;
-
     private static int REQUESTED_WINDOW_HEIGHT = 300;
+
+    /**
+     * DEAD_COLOR - color for inactive Dot
+     */
+
     public static Color DEAD_COLOR = Color.BLACK;
 
+    /**
+     * put example Dots in Model
+     */
     private static boolean startExampleModels = false;
 
     /**
@@ -38,10 +50,11 @@ public class Config {
      * window size cannot be smaller than board size
      */
     public static int RECTANGLE_WIDTH = Math.max(1, Math.floorDiv(REQUESTED_WINDOW_WIDTH, X_SIZE));
-
     public static int RECTANGLE_HEIGHT = Math.max(1, Math.floorDiv(REQUESTED_WINDOW_HEIGHT, Y_SIZE));
     public static int WIDTH = RECTANGLE_WIDTH * X_SIZE;
     public static int HEIGHT = RECTANGLE_HEIGHT * Y_SIZE;
+    public static int RECTANGLE_ARC_HEIGHT = RECTANGLE_HEIGHT / 5;
+    public static int RECTANGLE_ARC_WIDTH = RECTANGLE_WIDTH / 5;
 
     /*
     =============================================================================

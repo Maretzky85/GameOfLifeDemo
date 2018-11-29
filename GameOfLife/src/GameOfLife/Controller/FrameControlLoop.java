@@ -1,9 +1,15 @@
 package GameOfLife.Controller;
 
-import GameOfLife.CommonUsage.Config;
+import GameOfLife.Common.Config;
 
-import static GameOfLife.CommonUsage.Config.CONSOLE_VIEW;
-import static GameOfLife.CommonUsage.Config.FRAME_RATE;
+import static GameOfLife.Common.Config.CONSOLE_VIEW;
+import static GameOfLife.Common.Config.FRAME_RATE;
+
+/**
+ * This class is for controlling how many frames is generated for second
+ * This is clock for theoretical model, that run selected functions in requested frequency
+ * Additional sends call one per second (for FPS generation)
+ */
 
 public class FrameControlLoop extends Thread {
 
@@ -21,10 +27,17 @@ public class FrameControlLoop extends Thread {
     private long timeCounterMs = 0; //milliseconds counter
     private int FPS = 0;
     private int frame = 0;
+
+
     FrameControlLoop(Runnable updater) {
         this.updater = updater;
     }
 
+    /**
+     * Run function for starting loop control
+     * checks time between current time and start time, waits for rest ms,
+     * if time between current and start time is greater than time frame, than runs required command.
+     */
     public void run() {
         isRunning = true;
         while (isRunning) {
@@ -61,14 +74,25 @@ public class FrameControlLoop extends Thread {
         }
     }
 
+    /**
+     * function for killing FrameControlLoop
+     */
     void toggleLoopState() {
         isRunning = !isRunning;
     }
 
+    /**
+     * togglePause
+     * while true does not send update request
+     */
     void togglePause() {
         isPause = !isPause;
     }
 
+    /**
+     * decrease/increase speed
+     * decrease or increase update speed by altering timeframe value
+     */
     void decreaseSpeed() {
         timeFrame = timeFrame + 3;
         if (Config.isPrintStatistics()) {
@@ -84,11 +108,16 @@ public class FrameControlLoop extends Thread {
 
     }
 
-    int getFPS() {
-        return FPS;
-    }
-
+    /**
+     * Aditional timed function - called once per second
+     *
+     * @param showStatistics - runnable function called once per second
+     */
     void attachStatisticTimer(Runnable showStatistics) {
         statTimer = showStatistics;
+    }
+
+    int getFPS() {
+        return FPS;
     }
 }

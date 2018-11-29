@@ -1,7 +1,17 @@
-package GameOfLife.CommonUsage;
+package GameOfLife.Common;
 
+import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Class for console menu
+ * Clear screen - check for OS version and call proper clear screen command
+ * setingMenu - main menu for console
+ * gameMenu - menu for game options board X and Y size, desired start speed,
+ * FPS statistics and turn on example board
+ * viewMenu - menu for setting console or JavaFX view, and Window size for JavaFX window
+ * showHelp - print help to console - listing of all options
+ */
 public class SettingsMenu {
     private static Scanner scanner = new Scanner(System.in);
 
@@ -46,8 +56,8 @@ public class SettingsMenu {
                     choice = 0;
                     break;
                 default:
-                    System.out.print("Invalid option\n");
-                    scanner.nextLine();
+                    System.out.print("Invalid option press enter to continue\n");
+                    waitForEnter();
                     break;
             }
         }
@@ -125,7 +135,7 @@ public class SettingsMenu {
                     int heightInput = scanner.nextInt();
                     if (!Config.setRequestedWindowHeight(heightInput)) {
                         System.out.println("Press enter to continue");
-                        String temp = scanner.nextLine();
+                        waitForEnter();
                     } else {
                         clearScreen();
                         System.out.println("Set Window height to " + heightInput + "\n");
@@ -138,7 +148,7 @@ public class SettingsMenu {
                     int widthInput = scanner.nextInt();
                     if (!Config.setRequestedWindowWidth(widthInput)) {
                         System.out.println("Press enter to continue");
-                        String temp = scanner.nextLine();
+                        waitForEnter();
                     } else {
                         clearScreen();
                         System.out.println("Set Window height to " + widthInput + "\n");
@@ -167,7 +177,7 @@ public class SettingsMenu {
     public static void showHelp() {
         System.out.println("Usage:\n" +
                 "Console view - console view is for viewing only - there is no input method - quit with ctr(cmd) + c\n" +
-                "Example usage GameOfLife -c -e\n" +
+                "Example usage: GameOfLife -c -e\n" +
                 "JavaFX view:\n" +
                 "-Mouse:\n" +
                 "--Left key - change dot state\n" +
@@ -178,9 +188,15 @@ public class SettingsMenu {
                 "-- n - places example dots on board\n" +
                 "-- + - increase requested speed\n" +
                 "-- - - decrease speed\n");
-        System.out.println("Press any key and enter to continue");
-        String temp = scanner.next();
+        System.out.println("Press enter to continue");
+        waitForEnter();
     }
 
+    private static void waitForEnter(){
+        try {
+            System.in.read();
+        } catch (IOException ignored) {
+        }
+    }
 
 }
