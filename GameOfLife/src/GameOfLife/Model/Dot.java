@@ -4,7 +4,7 @@ public class Dot {
 
     private boolean alive = false;
 
-    boolean isAlive() {
+    public boolean isAlive() {
         return alive;
     }
 

@@ -22,7 +22,6 @@ public class FrameControlLoop extends Thread {
     }
 
     public void run() {
-
         isRunning = true;
         while (isRunning) {
             long currentTime = System.currentTimeMillis();
@@ -31,8 +30,7 @@ public class FrameControlLoop extends Thread {
 
             if (timeCounterMs >= timeFrame) {
                 updater.run();
-                System.out.println("FPS: " + FPS);
-                System.out.println("Frame: " + frame);
+//                System.out.println("Frame: " + frame);
                 tics += 1;
                 frame++;
                 timeCounterMs = 0;
@@ -43,7 +41,8 @@ public class FrameControlLoop extends Thread {
             }
             //if statement for FPS loging in console=========
             if (currentTime - startTime > 1000) {
-                System.out.println();
+//                System.out.println();
+                System.out.println("FPS: " + FPS);
                 startTime = System.currentTimeMillis();
                 FPS = tics;
                 tics = 0;

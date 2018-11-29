@@ -14,11 +14,13 @@ public class Board {
     }
 
     private void initBoard(Dot[][] boardToInit) {
+//        System.out.print("Initialising Board");
         for (int i = 0; i < boardToInit.length; i++) {
             for (int j = 0; j < boardToInit[0].length; j++) {
                 boardToInit[i][j] = new Dot();
             }
         }
+//        System.out.print("  ...Done\n");
     }
 
     public Dot[][] getBoard() {

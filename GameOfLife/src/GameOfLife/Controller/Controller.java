@@ -2,7 +2,7 @@ package GameOfLife.Controller;
 
 import GameOfLife.Common.BoardTooSmallExeption;
 import GameOfLife.Model.Board;
-import GameOfLife.View.ConsoleView;
+import GameOfLife.View.JavaFXView;
 
 import static GameOfLife.Common.Config.X_SIZE;
 import static GameOfLife.Common.Config.Y_SIZE;
@@ -10,14 +10,43 @@ import static GameOfLife.Common.Config.Y_SIZE;
 public class Controller {
 
     private Board model;
-    private ConsoleView view;
+    private JavaFXView view;
+    private FrameControlLoop loop;
 
 
     public Controller() throws BoardTooSmallExeption {
-        view = new ConsoleView();
+        long startTime = System.currentTimeMillis();
+        System.out.print("Initialising model");
         model = new Board(Y_SIZE, X_SIZE);
+        System.out.print(" ...done. Took " + (System.currentTimeMillis() - startTime) + " ms\n");
 
-//        Glider
+        System.out.print("Initialising GameOfLife.View...");
+        startTime = System.currentTimeMillis();
+        view = new JavaFXView();
+        System.out.print(" ...done. Took " + (System.currentTimeMillis() - startTime) + " ms\n");
+        loop = new FrameControlLoop(this::updateModel
+        );
+
+        initDots();
+
+        view.initScene();
+        model.nextGen();
+        view.refreshViewBoard(model);
+        loop.setDaemon(true);
+    }
+
+    public void startLoop() {
+        loop.start();
+    }
+
+    private void updateModel() {
+        model.nextGen();
+        view.refreshViewBoard(model);
+//        view.printBoard(model);
+    }
+
+    private void initDots() {
+        //        Glider
 //        model.getBoard()[2][2].toggleStatus();
 //        model.getBoard()[2][3].toggleStatus();
 //        model.getBoard()[2][1].toggleStatus();
@@ -59,15 +88,5 @@ public class Controller {
         model.getBoard()[6][17].toggleStatus();
 //        model.getBoard()[4][18].toggleStatus();
 //        model.getBoard()[10][18].toggleStatus();
-
-        view.printBoard(model);
-        FrameControlLoop framecontrol = new FrameControlLoop(this::run
-        );
-        framecontrol.run();
-    }
-
-    private void run() {
-        model.nextGen();
-        view.printBoard(model);
     }
 }
