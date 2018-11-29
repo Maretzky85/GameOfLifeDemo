@@ -25,8 +25,7 @@ public class SettingsMenu {
                 Runtime.getRuntime().exec("clear");
                 System.out.print("\033[H\033[2J");
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
     }
 
     public static void settingMenu() {
@@ -39,7 +38,7 @@ public class SettingsMenu {
                     "3: Display Help\n" +
                     "9: Quit\n" +
                     "0: Quit menu and start game");
-            switch (scanner.nextInt()) {
+            switch (inputValidator()) {
                 case 1:
                     viewMenu();
                     break;
@@ -75,26 +74,26 @@ public class SettingsMenu {
                     "4: Display FPS Statistics - " + Config.isPrintStatistics() + "\n" +
                     "5: Set example board on start - " + Config.isStartExampleModels() + "\n" +
                     "0: Return");
-            switch (scanner.nextInt()) {
+            switch (inputValidator()) {
                 case 1:
                     System.out.println("Please enter board X size\n");
-                    int boardXsize = scanner.nextInt();
-                    Config.setxSize(boardXsize);
+                    int boardXsize = inputValidator();
+                    Config.setXsize(boardXsize);
                     clearScreen();
                     System.out.println("Set board X size to: " + boardXsize + "\n");
                     scanner.nextLine();
                     break;
                 case 2:
                     System.out.println("Please enter board Y size\n");
-                    int boardYsize = scanner.nextInt();
-                    Config.setySize(boardYsize);
+                    int boardYsize = inputValidator();
+                    Config.setYsize(boardYsize);
                     clearScreen();
                     System.out.println("Set board Y size to: " + boardYsize + "\n");
                     scanner.nextLine();
                     break;
                 case 3:
                     System.out.println("Please enter desired speed in FPS\n");
-                    int requestedFPS = scanner.nextInt();
+                    int requestedFPS = inputValidator();
                     Config.setFrameRate(requestedFPS);
                     clearScreen();
                     System.out.println("Desired FPS set to: " + requestedFPS + "\n");
@@ -129,10 +128,11 @@ public class SettingsMenu {
                     "3: Set Console View - current state - " + Config.isConsoleView() + "\n" +
                     "4: Set JavaFX View\n" +
                     "0: Return");
-            switch (scanner.nextInt()) {
+            switch (inputValidator()) {
                 case 1:
                     System.out.println("Please enter requested window height");
-                    int heightInput = scanner.nextInt();
+                    int heightInput = inputValidator();
+                    
                     if (!Config.setRequestedWindowHeight(heightInput)) {
                         System.out.println("Press enter to continue");
                         waitForEnter();
@@ -141,11 +141,10 @@ public class SettingsMenu {
                         System.out.println("Set Window height to " + heightInput + "\n");
                         scanner.nextLine();
                     }
-
                     break;
                 case 2:
                     System.out.println("Please enter requested window width");
-                    int widthInput = scanner.nextInt();
+                    int widthInput = inputValidator();
                     if (!Config.setRequestedWindowWidth(widthInput)) {
                         System.out.println("Press enter to continue");
                         waitForEnter();
@@ -195,8 +194,15 @@ public class SettingsMenu {
     private static void waitForEnter(){
         try {
             System.in.read();
-        } catch (IOException ignored) {
-        }
+        } catch (IOException ignored) {}
     }
 
+    private static int inputValidator(){
+        while(!scanner.hasNextInt()){
+            System.out.println("Please enter a number");
+            scanner.nextLine();
+        }
+        return scanner.nextInt();
+
+    }
 }

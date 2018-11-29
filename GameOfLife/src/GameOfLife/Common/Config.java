@@ -3,7 +3,7 @@ package GameOfLife.Common;
 import javafx.scene.paint.Color;
 
 public class Config {
-    public static double VERSION = 0.96;
+    public static double VERSION = 0.98;
 
     /**
      * Print statistics
@@ -17,6 +17,7 @@ public class Config {
      * for console view limit x and y for console size
      */
     public static boolean CONSOLE_VIEW = false;
+
     /**
      * X_SIZE and Y_SIZE - size of grid for GameOfLife board
      * FRAME_RATE - how many generations to render in one second
@@ -35,33 +36,32 @@ public class Config {
     /**
      * DEAD_COLOR - color for inactive Dot
      */
-
     public static Color DEAD_COLOR = Color.BLACK;
 
     /**
-     * put example Dots in Model
+     * put example Dots in Model on game start
      */
     private static boolean startExampleModels = false;
 
     /**
      * DO NOT EDIT!!!!
      * configuration for matching JavaFX Window for board size
-     * if window width and heigth are not dividable by board size
+     * if window width and height are not dividable by board size
      * window size cannot be smaller than board size
      */
     public static int RECTANGLE_WIDTH = Math.max(1, Math.floorDiv(REQUESTED_WINDOW_WIDTH, X_SIZE));
     public static int RECTANGLE_HEIGHT = Math.max(1, Math.floorDiv(REQUESTED_WINDOW_HEIGHT, Y_SIZE));
     public static int WIDTH = RECTANGLE_WIDTH * X_SIZE;
     public static int HEIGHT = RECTANGLE_HEIGHT * Y_SIZE;
-    public static int RECTANGLE_ARC_HEIGHT = RECTANGLE_HEIGHT / 5;
-    public static int RECTANGLE_ARC_WIDTH = RECTANGLE_WIDTH / 5;
+    public static int RECTANGLE_ARC_HEIGHT = RECTANGLE_HEIGHT / 3;
+    public static int RECTANGLE_ARC_WIDTH = RECTANGLE_WIDTH / 3;
 
     /*
     =============================================================================
-    setters and getters for console menu
+    setters and getters for console menu and in-game modifications from JavaFX
      */
 
-    static void togglePrintStatistics() {
+    public static void togglePrintStatistics() {
         printStatistics = !printStatistics;
     }
 
@@ -69,7 +69,7 @@ public class Config {
         CONSOLE_VIEW = consoleView;
     }
 
-    static void setxSize(int xSize) {
+    public static void setXsize(int xSize) {
         X_SIZE = xSize;
         if (REQUESTED_WINDOW_WIDTH < X_SIZE) {
             REQUESTED_WINDOW_WIDTH = X_SIZE;
@@ -77,7 +77,7 @@ public class Config {
         resize();
     }
 
-    static void setySize(int ySize) {
+    public static void setYsize(int ySize) {
         Y_SIZE = ySize;
         if (REQUESTED_WINDOW_HEIGHT < Y_SIZE) {
             REQUESTED_WINDOW_HEIGHT = Y_SIZE;
@@ -89,7 +89,7 @@ public class Config {
         FRAME_RATE = frameRate;
     }
 
-    static boolean setRequestedWindowWidth(int requestedWindowWidth) {
+    public static boolean setRequestedWindowWidth(int requestedWindowWidth) {
         boolean ok = false;
         if (requestedWindowWidth < X_SIZE) {
             REQUESTED_WINDOW_WIDTH = X_SIZE;
@@ -102,7 +102,7 @@ public class Config {
         return ok;
     }
 
-    static boolean setRequestedWindowHeight(int requestedWindowHeight) {
+    public static boolean setRequestedWindowHeight(int requestedWindowHeight) {
         boolean ok = false;
         if (requestedWindowHeight < Y_SIZE) {
             REQUESTED_WINDOW_HEIGHT = Y_SIZE;
@@ -124,6 +124,8 @@ public class Config {
         WIDTH = RECTANGLE_WIDTH * X_SIZE;
         RECTANGLE_HEIGHT = Math.max(1, Math.floorDiv(REQUESTED_WINDOW_HEIGHT, Y_SIZE));
         HEIGHT = RECTANGLE_HEIGHT * Y_SIZE;
+        RECTANGLE_ARC_HEIGHT = RECTANGLE_HEIGHT / 3;
+        RECTANGLE_ARC_WIDTH = RECTANGLE_WIDTH / 3;
     }
 
     public static boolean isPrintStatistics() {
@@ -157,4 +159,5 @@ public class Config {
     public static boolean isStartExampleModels() {
         return startExampleModels;
     }
+
 }

@@ -46,6 +46,7 @@ public class Controller implements Observer {
 
         System.out.print("Initialising model");
         model = new Board(Y_SIZE, X_SIZE);
+
         if (Config.isStartExampleModels()) {
             model.initExampleBoard();
         }
@@ -66,21 +67,19 @@ public class Controller implements Observer {
 
         view.viewInit();
 
-        if (!CONSOLE_VIEW) {
+        if (CONSOLE_VIEW) {
+            loop.togglePause();
+        } else {
             loop.setDaemon(true);
             view.attachObserver(this);
             view.refresh(model.getBoard());
-        } else {
-            loop.togglePause();
         }
-
     }
 
 
     /**
      * ***Only for JavaFX view
      * Overriden method for updating model if input is received
-     *
      *
      * @param o - observable object( in this case InputHandler Class )
      * @param arg - arguments for update:

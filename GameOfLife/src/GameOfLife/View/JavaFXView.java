@@ -1,5 +1,6 @@
 package GameOfLife.View;
 
+import GameOfLife.Common.Config;
 import GameOfLife.Controller.Controller;
 import GameOfLife.Model.Dot;
 import javafx.application.Platform;
@@ -23,7 +24,7 @@ public class JavaFXView implements ViewInterface {
 
     private Stage primaryStage;
     private Group group = new Group();
-    private Scene scene = new Scene(group, WIDTH, HEIGHT);
+    private Scene scene = new Scene(group, WIDTH, HEIGHT, Color.BLACK);
     private InputHandler inputHandler = new InputHandler();
     private Rectangle[][] viewRectangleTable;
     private boolean ongoingUpdateFromModel = false;
@@ -41,40 +42,20 @@ public class JavaFXView implements ViewInterface {
 
     /**
      * viewInit method
-     * Attaches listeners for mouse and keyboard input to scene
      * Sets stages title, creates and initialises reflecting rectangle table for holding view`s side rectangles
      * Defines rectangle appearance
      * Calls scene set and view methods for showing window.
-     *
-     *
+     * Calls attachListeners function to attach proper listeners to stage and scene
      */
     @Override
     public void viewInit() {
-        scene.setOnKeyPressed(this::handleInput);
-        scene.setOnMousePressed(this::handleInput);
-
         System.out.println("JavaFX: Initialising Scene.");
         primaryStage.setTitle("Game Of Life  v " + VERSION);
 
         long startTime = System.currentTimeMillis();
-        System.out.print("JavaFX: Initialising grid");
-        viewRectangleTable = new Rectangle[Y_SIZE][X_SIZE];
-        for (int boardYposition = 0; boardYposition < Y_SIZE; boardYposition++) {
-            if (boardYposition % 25 == 0) {
-                System.out.print(".");
-            }
-            for (int boardXposition = 0; boardXposition < X_SIZE; boardXposition++) {
 
-                Rectangle rectangleToAdd = new Rectangle
-                        (boardXposition * RECTANGLE_WIDTH,
-                        boardYposition * RECTANGLE_HEIGHT,
-                        RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
-                rectangleToAdd.setArcHeight(RECTANGLE_ARC_HEIGHT);
-                rectangleToAdd.setArcWidth(RECTANGLE_ARC_WIDTH);
-                viewRectangleTable[boardYposition][boardXposition] = rectangleToAdd;
-                group.getChildren().add(viewRectangleTable[boardYposition][boardXposition]);
-            }
-        }
+        System.out.print("JavaFX: Initialising grid");
+        initGrid();
         System.out.print(" Done. Initialising grid took " + (System.currentTimeMillis() - startTime) + " ms\n");
 
         System.out.println("JavaFX: Setting-up scene");
@@ -85,9 +66,62 @@ public class JavaFXView implements ViewInterface {
         startTime = System.currentTimeMillis();
         primaryStage.show();
         System.out.println("JavaFX: Preparing window took " + (System.currentTimeMillis() - startTime) + " ms");
+        attachListeners();
 
     }
 
+    /**
+     * Attaches listeners for mouse and keyboard input to scene
+     * Attaches listeners for stage width and height and calls resizeGrid if needed
+     */
+    private void attachListeners(){
+        int windowUpperBarTreshold = -30;
+        primaryStage.widthProperty().addListener((observable, oldValue, newValue) -> {
+            Config.setRequestedWindowWidth(newValue.intValue());
+            resizeGrid();
+        });
+
+        primaryStage.heightProperty().addListener((observable, oldValue, newValue) -> {
+            Config.setRequestedWindowHeight(newValue.intValue()+windowUpperBarTreshold);
+            resizeGrid();
+        });
+
+        scene.setOnKeyPressed(this::handleInput);
+        scene.setOnMousePressed(this::handleInput);
+    }
+
+    private void resizeGrid(){
+        for (int boardYposition = 0; boardYposition < Y_SIZE; boardYposition++) {
+            for (int boardXposition = 0; boardXposition < X_SIZE; boardXposition++) {
+                viewRectangleTable[boardYposition][boardXposition].setHeight(RECTANGLE_HEIGHT);
+                viewRectangleTable[boardYposition][boardXposition].setWidth(RECTANGLE_WIDTH);
+                viewRectangleTable[boardYposition][boardXposition].setX(RECTANGLE_WIDTH * boardXposition);
+                viewRectangleTable[boardYposition][boardXposition].setY(RECTANGLE_HEIGHT * boardYposition);
+                viewRectangleTable[boardYposition][boardXposition].setArcHeight(RECTANGLE_ARC_HEIGHT);
+                viewRectangleTable[boardYposition][boardXposition].setArcWidth(RECTANGLE_ARC_WIDTH);
+            }
+        }
+    }
+
+    private void initGrid() {
+        viewRectangleTable = new Rectangle[Y_SIZE][X_SIZE];
+        for (int boardYposition = 0; boardYposition < Y_SIZE; boardYposition++) {
+            if (boardYposition % 25 == 0) {
+                System.out.print(".");
+            }
+            for (int boardXposition = 0; boardXposition < X_SIZE; boardXposition++) {
+
+                Rectangle rectangleToAdd = new Rectangle
+                        (boardXposition * RECTANGLE_WIDTH,
+                                boardYposition * RECTANGLE_HEIGHT,
+                                RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
+                rectangleToAdd.setArcHeight(RECTANGLE_ARC_HEIGHT);
+                rectangleToAdd.setArcWidth(RECTANGLE_ARC_WIDTH);
+                viewRectangleTable[boardYposition][boardXposition] = rectangleToAdd;
+                group.getChildren().add(viewRectangleTable[boardYposition][boardXposition]);
+            }
+        }
+    }
 
     /**
      * handleInput method for handling view side and routing for InputHandler class
@@ -120,11 +154,15 @@ public class JavaFXView implements ViewInterface {
         ongoingUpdateFromView = true;
         Platform.runLater(() -> {
             if (event.getPickResult().getIntersectedNode() != null) {
-                Rectangle rectangle = (Rectangle) event.getPickResult().getIntersectedNode();
+                Rectangle rectangle = (Rectangle) event.
+                        getPickResult().
+                        getIntersectedNode();
                 if (rectangle.getFill().equals(Color.WHITE)) {
-                    rectangle.setFill(DEAD_COLOR);
+                    rectangle.
+                            setFill(DEAD_COLOR);
                 } else {
-                    rectangle.setFill(Color.WHITE);
+                    rectangle.
+                            setFill(Color.WHITE);
                 }
                 ongoingUpdateFromView = false;
             }
@@ -182,7 +220,7 @@ public class JavaFXView implements ViewInterface {
      * attachObserver function
      * passes observer to observator class that handles input calls
      *
-     * @param controller - controler of GameOfLife
+     * @param controller - controller of GameOfLife
      */
     @Override
     public void attachObserver(Controller controller) {
