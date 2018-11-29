@@ -1,6 +1,6 @@
-package Model;
+package GameOfLife.Model;
 
-import Common.BoardTooSmallExeption;
+import GameOfLife.Common.BoardTooSmallExeption;
 
 public class Board {
     private Dot[][] board;

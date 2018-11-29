@@ -1,4 +1,4 @@
-package Common;
+package GameOfLife.Common;
 
 public class Config {
     public static int X_SIZE = 40;

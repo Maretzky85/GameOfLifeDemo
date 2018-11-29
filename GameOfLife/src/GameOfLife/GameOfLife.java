@@ -1,5 +1,7 @@
-import Common.BoardTooSmallExeption;
-import Controller.Controller;
+package GameOfLife;
+
+import GameOfLife.Common.BoardTooSmallExeption;
+import GameOfLife.Controller.Controller;
 
 public class GameOfLife {
     public static void main(String[] args) throws BoardTooSmallExeption {

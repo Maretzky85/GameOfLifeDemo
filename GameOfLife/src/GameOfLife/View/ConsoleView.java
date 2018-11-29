@@ -1,6 +1,6 @@
-package View;
+package GameOfLife.View;
 
-import Model.Board;
+import GameOfLife.Model.Board;
 
 public class ConsoleView {
 

@@ -1,4 +1,4 @@
-package Common;
+package GameOfLife.Common;
 
 public class BoardTooSmallExeption extends Exception {
     public BoardTooSmallExeption(String errorMessage) {

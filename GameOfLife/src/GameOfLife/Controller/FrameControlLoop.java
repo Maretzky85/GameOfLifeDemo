@@ -1,6 +1,6 @@
-package Controller;
+package GameOfLife.Controller;
 
-import static Common.Config.FRAME_RATE;
+import static GameOfLife.Common.Config.FRAME_RATE;
 
 public class FrameControlLoop extends Thread {
 

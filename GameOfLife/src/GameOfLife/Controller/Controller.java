@@ -1,11 +1,11 @@
-package Controller;
+package GameOfLife.Controller;
 
-import Common.BoardTooSmallExeption;
-import Model.Board;
-import View.ConsoleView;
+import GameOfLife.Common.BoardTooSmallExeption;
+import GameOfLife.Model.Board;
+import GameOfLife.View.ConsoleView;
 
-import static Common.Config.X_SIZE;
-import static Common.Config.Y_SIZE;
+import static GameOfLife.Common.Config.X_SIZE;
+import static GameOfLife.Common.Config.Y_SIZE;
 
 public class Controller {
 

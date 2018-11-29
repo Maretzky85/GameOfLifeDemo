@@ -1,4 +1,4 @@
-package Model;
+package GameOfLife.Model;
 
 public class Dot {
 
