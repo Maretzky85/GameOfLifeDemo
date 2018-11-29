@@ -22,7 +22,7 @@ public class ConsoleView extends AbstractView {
             System.out.println();
             for (int j = 0; j < board.getBoard()[0].length; j++) {
                 if (board.getBoard()[i][j] == null) {
-                    System.out.print(" ");
+                    System.out.print("-");
                 } else {
                     System.out.print("*");
                 }

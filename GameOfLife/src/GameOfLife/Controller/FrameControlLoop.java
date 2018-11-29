@@ -1,5 +1,6 @@
 package GameOfLife.Controller;
 
+import static GameOfLife.Common.Config.CONSOLE_VIEW;
 import static GameOfLife.Common.Config.FRAME_RATE;
 
 public class FrameControlLoop extends Thread {
@@ -30,8 +31,10 @@ public class FrameControlLoop extends Thread {
 
             if (timeCounterMs >= timeFrame) {
                 updater.run();
-//                System.out.println("Frame: " + frame);
-//                System.out.println("FPS: " + FPS);
+                if (CONSOLE_VIEW) {
+                    System.out.println("Frame: " + frame);
+                    System.out.println("FPS: " + FPS);
+                }
                 tics += 1;
                 frame++;
                 timeCounterMs = 0;
@@ -42,8 +45,9 @@ public class FrameControlLoop extends Thread {
             }
             //if statement for FPS loging in console=========
             if (currentTime - startTime > 1000) {
-//                System.out.println();
-                System.out.println("FPS: " + FPS);
+                if (!CONSOLE_VIEW) {
+                    System.out.println("FPS: " + FPS);
+                }
                 startTime = System.currentTimeMillis();
                 FPS = tics;
                 tics = 0;

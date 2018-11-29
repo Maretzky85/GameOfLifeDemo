@@ -5,21 +5,13 @@ import GameOfLife.Common.BoardTooSmallExeption;
 public class Board {
     private Dot[][] board;
 
-    public Board(int x, int y) throws BoardTooSmallExeption {
+    public Board(int y, int x) throws BoardTooSmallExeption {
         if (x < 1 || y < 1) {
             throw new BoardTooSmallExeption("Board must be at least 1 x 1");
         }
-        this.board = new Dot[x][y];
-        initBoard(this.board);
+        this.board = new Dot[y][x];
     }
 
-    private void initBoard(Dot[][] boardToInit) {
-//        for (int i = 0; i < boardToInit.length; i++) {
-//            for (int j = 0; j < boardToInit[0].length; j++) {
-//                boardToInit[i][j] = new Dot();
-//            }
-//        }
-    }
 
     public Dot[][] getBoard() {
         return board;
@@ -28,7 +20,6 @@ public class Board {
     public void nextGen() {
 
         Dot[][] tempBoard = newEmptyBoard();
-        Dot dotToCopy = null;
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
@@ -41,25 +32,6 @@ public class Board {
                 } else if (currentDestDot == null && aliveNeighbors == 3) {
                     tempBoard[i][j] = new Dot();
                 }
-
-//                try {
-//                    currentSourceDot = board[i][j].isAlive();
-//                    dotToCopy = board[i][j];
-//                }catch (NullPointerException exeption){
-//                    currentSourceDot = false;
-//                }
-//
-//                Dot currentDestDot = tempBoard[i][j];
-//                int aliveNeighbors = getNeighbors(j, i);
-//
-//                if ((currentSourceDot && aliveNeighbors <= 3) && (currentSourceDot && aliveNeighbors >= 2)) {
-//                    currentDestDot = dotToCopy;
-////                    currentDestDot.toggleStatus();
-//                }
-//                if (!currentSourceDot && aliveNeighbors == 3) {
-//                    currentDestDot = dotToCopy;
-////                    currentDestDot.toggleStatus();
-//                }
             }
         }
         this.board = tempBoard;
@@ -84,7 +56,6 @@ public class Board {
                 }
             }
         }
-//        System.out.println("X,Y: "+x+" "+y+" "+ "N: "+neighbors);
         return neighbors;
     }
 }

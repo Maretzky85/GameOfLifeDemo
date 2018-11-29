@@ -62,13 +62,22 @@ public class Controller {
         int yOffset = 30;
         int x2Offset = 80;
         int y2Offset = 100;
+        int x3Offset = 0;
+        int y3Offset = 0;
+
+        //Box
+//        model.getBoard()[2][1] = new Dot();
+//        model.getBoard()[2][2] = new Dot();
+//        model.getBoard()[3][1] = new Dot();
+//        model.getBoard()[3][2] = new Dot();
+
 
         //        Glider
-        model.getBoard()[2][2] = new Dot();
-        model.getBoard()[2][3] = new Dot();
-        model.getBoard()[2][1] = new Dot();
-        model.getBoard()[1][3] = new Dot();
-        model.getBoard()[0][2] = new Dot();
+        model.getBoard()[2 + y3Offset][2 + x3Offset] = new Dot();
+        model.getBoard()[2 + y3Offset][3 + x3Offset] = new Dot();
+        model.getBoard()[2 + y3Offset][1 + x3Offset] = new Dot();
+        model.getBoard()[1 + y3Offset][3 + x3Offset] = new Dot();
+        model.getBoard()[0 + y3Offset][2 + x3Offset] = new Dot();
 
 //        something
         model.getBoard()[8 + x2Offset][1 + y2Offset] = new Dot();
@@ -102,7 +111,7 @@ public class Controller {
         model.getBoard()[8 + xOffset][17 + yOffset] = new Dot();
         model.getBoard()[7 + xOffset][17 + yOffset] = new Dot();
         model.getBoard()[6 + xOffset][17 + yOffset] = new Dot();
-        model.getBoard()[4][18] = new Dot();
-        model.getBoard()[10][18] = new Dot();
+//        model.getBoard()[4][18] = new Dot();
+//        model.getBoard()[10][18] = new Dot();
     }
 }
