@@ -11,4 +11,5 @@ public interface ViewInterface {
 
     void attachObserver(Controller controller);
 
+    int getDroppedFrames();
 }

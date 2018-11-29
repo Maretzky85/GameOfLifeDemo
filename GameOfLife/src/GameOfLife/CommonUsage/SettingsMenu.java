@@ -1,4 +1,4 @@
-package GameOfLife.Common;
+package GameOfLife.CommonUsage;
 
 import java.util.Scanner;
 
@@ -62,7 +62,8 @@ public class SettingsMenu {
                     "1: Set board X size - " + Config.getxSize() + "\n" +
                     "2: Set board Y size - " + Config.getySize() + "\n" +
                     "3: Set speed (FPS) - " + Config.getFrameRate() + "\n" +
-                    "4: Set example board on start - " + Config.isStartExampleModels() + "\n" +
+                    "4: Display FPS Statistics - " + Config.isPrintStatistics() + "\n" +
+                    "5: Set example board on start - " + Config.isStartExampleModels() + "\n" +
                     "0: Return");
             switch (scanner.nextInt()) {
                 case 1:
@@ -90,6 +91,10 @@ public class SettingsMenu {
                     scanner.nextLine();
                     break;
                 case 4:
+                    Config.togglePrintStatistics();
+                    clearScreen();
+                    break;
+                case 5:
                     Config.toggleStartExampleModels();
                     clearScreen();
                     break;
@@ -109,24 +114,13 @@ public class SettingsMenu {
         clearScreen();
         while (choice > 0) {
             System.out.println("View Menu:\n" +
-                    "1: Set Console View - current state - " + Config.isConsoleView() + "\n2: Set JavaFX View\n" +
-                    "3: Set Window Height - " + Config.getRequestedWindowHeight() + "\n" +
-                    "4: Set Window Width - " + Config.getRequestedWindowWidth() + "\n" +
+                    "1: Set Window Height - " + Config.getRequestedWindowHeight() + "\n" +
+                    "2: Set Window Width - " + Config.getRequestedWindowWidth() + "\n" +
+                    "3: Set Console View - current state - " + Config.isConsoleView() + "\n" +
+                    "4: Set JavaFX View\n" +
                     "0: Return");
             switch (scanner.nextInt()) {
                 case 1:
-                    Config.setConsoleView(true);
-                    clearScreen();
-                    System.out.println("Set View to Console GameOfLife.View\n");
-                    scanner.nextLine();
-                    break;
-                case 2:
-                    Config.setConsoleView(false);
-                    clearScreen();
-                    System.out.println("Set View to JavaFX GameOfLife.View\n");
-                    scanner.nextLine();
-                    break;
-                case 3:
                     System.out.println("Please enter requested window height");
                     int heightInput = scanner.nextInt();
                     if (!Config.setRequestedWindowHeight(heightInput)) {
@@ -139,7 +133,7 @@ public class SettingsMenu {
                     }
 
                     break;
-                case 4:
+                case 2:
                     System.out.println("Please enter requested window width");
                     int widthInput = scanner.nextInt();
                     if (!Config.setRequestedWindowWidth(widthInput)) {
@@ -151,6 +145,18 @@ public class SettingsMenu {
                         scanner.nextLine();
                     }
                     break;
+                case 3:
+                    Config.setConsoleView(true);
+                    clearScreen();
+                    System.out.println("Set View to Console View\n");
+                    scanner.nextLine();
+                    break;
+                case 4:
+                    Config.setConsoleView(false);
+                    clearScreen();
+                    System.out.println("Set View to JavaFX View\n");
+                    scanner.nextLine();
+                    break;
                 case 0:
                     choice = 0;
                     break;
@@ -161,7 +167,7 @@ public class SettingsMenu {
     public static void showHelp() {
         System.out.println("Usage:\n" +
                 "Console view - console view is for viewing only - there is no input method - quit with ctr(cmd) + c\n" +
-                "Example usage GameOfLife.GameOfLife -c -e\n" +
+                "Example usage GameOfLife -c -e\n" +
                 "JavaFX view:\n" +
                 "-Mouse:\n" +
                 "--Left key - change dot state\n" +

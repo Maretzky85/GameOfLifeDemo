@@ -1,7 +1,7 @@
 package GameOfLife.Controller;
 
-import GameOfLife.Common.BoardTooSmallException;
-import GameOfLife.Common.Config;
+import GameOfLife.CommonUsage.BoardTooSmallException;
+import GameOfLife.CommonUsage.Config;
 import GameOfLife.Model.Board;
 import GameOfLife.View.ConsoleView;
 import GameOfLife.View.JavaFXView;
@@ -10,7 +10,7 @@ import GameOfLife.View.ViewInterface;
 import java.util.Observable;
 import java.util.Observer;
 
-import static GameOfLife.Common.Config.*;
+import static GameOfLife.CommonUsage.Config.*;
 
 public class Controller implements Observer {
 
@@ -45,7 +45,8 @@ public class Controller implements Observer {
 
         System.out.print(" ...done. Took " + (System.currentTimeMillis() - startTime) + " ms\n");
 
-        loop = new FrameControlLoop(this::updateModel);
+        loop = new FrameControlLoop(this::updateState);
+        loop.attachStatisticTimer(this::showStatistics);
 
         view.viewInit();
         if (!CONSOLE_VIEW) {
@@ -108,12 +109,14 @@ public class Controller implements Observer {
         loop.start();
     }
 
-    private void updateModel() {
+    private void updateState() {
         model.nextGen();
         view.refresh(model);
     }
 
-    public void initExampleBoard() {
-        model.initExampleBoard();
+    private void showStatistics() {
+        if (Config.isPrintStatistics()) {
+            System.out.println("Current model FPS: " + loop.getFPS() + "\nDropped View frames: " + view.getDroppedFrames() + "\n");
+        }
     }
 }

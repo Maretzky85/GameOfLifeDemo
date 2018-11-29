@@ -1,6 +1,6 @@
 package GameOfLife.Model;
 
-import GameOfLife.Common.BoardTooSmallException;
+import GameOfLife.CommonUsage.BoardTooSmallException;
 
 import java.util.Arrays;
 

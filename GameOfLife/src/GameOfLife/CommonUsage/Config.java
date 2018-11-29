@@ -1,9 +1,12 @@
-package GameOfLife.Common;
+package GameOfLife.CommonUsage;
 
 import javafx.scene.paint.Color;
 
 public class Config {
-    public static double VERSION = 0.95;
+    public static double VERSION = 0.96;
+
+    private static boolean printStatistics = false;
+
     /**
      * CONSOLE_VIEW - console printing if true, JavaFX Window if false
      * for console view limit x and y for console size
@@ -15,7 +18,6 @@ public class Config {
      */
     public static int X_SIZE = 100;
     public static int Y_SIZE = 100;
-
     public static int FRAME_RATE = 20;
 
     /**
@@ -23,8 +25,8 @@ public class Config {
      * DEAD_COLOR - color for inactive Dot
      */
     private static int REQUESTED_WINDOW_WIDTH = 400;
-    private static int REQUESTED_WINDOW_HEIGHT = 300;
 
+    private static int REQUESTED_WINDOW_HEIGHT = 300;
     public static Color DEAD_COLOR = Color.BLACK;
 
     private static boolean startExampleModels = false;
@@ -36,15 +38,20 @@ public class Config {
      * window size cannot be smaller than board size
      */
     public static int RECTANGLE_WIDTH = Math.max(1, Math.floorDiv(REQUESTED_WINDOW_WIDTH, X_SIZE));
+
     public static int RECTANGLE_HEIGHT = Math.max(1, Math.floorDiv(REQUESTED_WINDOW_HEIGHT, Y_SIZE));
     public static int WIDTH = RECTANGLE_WIDTH * X_SIZE;
-
     public static int HEIGHT = RECTANGLE_HEIGHT * Y_SIZE;
 
     /*
     =============================================================================
     setters and getters for console menu
      */
+
+    static void togglePrintStatistics() {
+        printStatistics = !printStatistics;
+    }
+
     public static void setConsoleView(boolean consoleView) {
         CONSOLE_VIEW = consoleView;
     }
@@ -104,6 +111,10 @@ public class Config {
         WIDTH = RECTANGLE_WIDTH * X_SIZE;
         RECTANGLE_HEIGHT = Math.max(1, Math.floorDiv(REQUESTED_WINDOW_HEIGHT, Y_SIZE));
         HEIGHT = RECTANGLE_HEIGHT * Y_SIZE;
+    }
+
+    public static boolean isPrintStatistics() {
+        return printStatistics;
     }
 
     static boolean isConsoleView() {

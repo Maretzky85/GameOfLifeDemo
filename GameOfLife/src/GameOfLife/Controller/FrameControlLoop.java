@@ -1,11 +1,14 @@
 package GameOfLife.Controller;
 
-import static GameOfLife.Common.Config.CONSOLE_VIEW;
-import static GameOfLife.Common.Config.FRAME_RATE;
+import GameOfLife.CommonUsage.Config;
+
+import static GameOfLife.CommonUsage.Config.CONSOLE_VIEW;
+import static GameOfLife.CommonUsage.Config.FRAME_RATE;
 
 public class FrameControlLoop extends Thread {
 
     private Runnable updater;
+    private Runnable statTimer;
 
     private boolean isRunning = false;
     private boolean isPause = true;
@@ -18,7 +21,6 @@ public class FrameControlLoop extends Thread {
     private long timeCounterMs = 0; //milliseconds counter
     private int FPS = 0;
     private int frame = 0;
-
     FrameControlLoop(Runnable updater) {
         this.updater = updater;
     }
@@ -47,11 +49,9 @@ public class FrameControlLoop extends Thread {
                 Thread.sleep(timeFrame - timeCounterMs);
             } catch (InterruptedException ignored) {
             }
-            //if statement for FPS loging in console=========
+            //FPS loging in ======================
             if (currentTime - startTime > 1000) {
-                if (!CONSOLE_VIEW) {
-                    System.out.println("FPS: " + FPS);
-                }
+                statTimer.run();
                 startTime = System.currentTimeMillis();
                 FPS = tics;
                 tics = 0;
@@ -71,11 +71,24 @@ public class FrameControlLoop extends Thread {
 
     void decreaseSpeed() {
         timeFrame = timeFrame + 3;
-        System.out.println("new FPS: " + 1000 / timeFrame);
+        if (Config.isPrintStatistics()) {
+            System.out.println("new requested FPS: " + 1000 / timeFrame);
+        }
     }
 
     void increaseSpeed() {
         timeFrame = Math.max(timeFrame - 3, 5);
-        System.out.println("new FPS: " + 1000 / timeFrame);
+        if (Config.isPrintStatistics()) {
+            System.out.println("new requested FPS: " + 1000 / timeFrame);
+        }
+
+    }
+
+    int getFPS() {
+        return FPS;
+    }
+
+    void attachStatisticTimer(Runnable showStatistics) {
+        statTimer = showStatistics;
     }
 }

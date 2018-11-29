@@ -40,4 +40,9 @@ public class ConsoleView implements ViewInterface {
     public void attachObserver(Controller ignore) {
     }
 
+    @Override
+    public int getDroppedFrames() {
+        return 0;
+    }
+
 }

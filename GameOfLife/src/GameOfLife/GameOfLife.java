@@ -1,7 +1,7 @@
 package GameOfLife;
 
-import GameOfLife.Common.Config;
-import GameOfLife.Common.SettingsMenu;
+import GameOfLife.CommonUsage.Config;
+import GameOfLife.CommonUsage.SettingsMenu;
 import GameOfLife.Controller.Controller;
 import javafx.application.Application;
 import javafx.application.Platform;

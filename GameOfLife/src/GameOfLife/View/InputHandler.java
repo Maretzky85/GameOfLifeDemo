@@ -1,6 +1,6 @@
 package GameOfLife.View;
 
-import GameOfLife.Common.Common;
+import GameOfLife.CommonUsage.CommonFunctions;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -19,8 +19,8 @@ class InputHandler extends Observable {
                 case NONE:
                     break;
                 case PRIMARY:
-                    int gridXposition = Common.translateWindowXtoBoardX(mouseEvent.getX());
-                    int gridYposition = Common.translateWindowYtoBoardY(mouseEvent.getY());
+                    int gridXposition = CommonFunctions.translateWindowXtoBoardX(mouseEvent.getX());
+                    int gridYposition = CommonFunctions.translateWindowYtoBoardY(mouseEvent.getY());
                     int position[] = new int[]{gridXposition, gridYposition};
                     setChanged();
                     notifyObservers(position);
