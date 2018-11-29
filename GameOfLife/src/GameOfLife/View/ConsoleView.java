@@ -1,8 +1,9 @@
 package GameOfLife.View;
 
+import GameOfLife.Controller.Controller;
 import GameOfLife.Model.Board;
 
-public class ConsoleView extends AbstractView {
+public class ConsoleView implements ViewInterface {
 
     private static void clearScreen() {
         System.out.print("\033[H\033[2J");
@@ -32,4 +33,10 @@ public class ConsoleView extends AbstractView {
         System.out.println();
         System.out.println();
     }
+
+    @Override
+    public void attachObserver(Controller controller) {
+        //ignore
+    }
+
 }

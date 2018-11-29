@@ -57,4 +57,12 @@ public class Board {
         }
         return neighbors;
     }
+
+    public void updateOnPosition(int x, int y) {
+        if (getBoard()[y][x] == null) {
+            getBoard()[y][x] = new Dot();
+        } else {
+            getBoard()[y][x] = null;
+        }
+    }
 }

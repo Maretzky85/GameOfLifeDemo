@@ -14,22 +14,18 @@ public class Config {
      * X_SIZE and Y_SIZE - size of grid for GameOfLife.GameOfLife board
      * FRAME_RATE - how many generations to render in one second
      */
-    public static int X_SIZE = 50;
-    public static int Y_SIZE = 30;
+    public static int X_SIZE = 150;
+    public static int Y_SIZE = 150;
     public static int FRAME_RATE = 20;
 
 
     /**
      * JavaFX Configuration
-     * ALIVE_COLOR - color for newly spawned dot
-     * SECOND_COLOR - color for dot that lives 2 or more generations
      * DEAD_COLOR - color for inactive Dot
      */
-    private static int REQUESTED_WINDOW_WIDTH = 800;
-    private static int REQUESTED_WINDOW_HEIGHT = 800;
-    public static Color ALIVE_COLOR = Color.YELLOW;
+    private static int REQUESTED_WINDOW_WIDTH = 1000;
+    private static int REQUESTED_WINDOW_HEIGHT = 1000;
     public static Color DEAD_COLOR = Color.BLACK;
-    public static Color SECOND_COLOR = Color.CRIMSON;
 
 
     /**

@@ -8,6 +8,7 @@ public class FrameControlLoop extends Thread {
     private Runnable updater;
 
     private boolean isRunning = false;
+    private boolean isPause = false;
 
     private int tics = 0; //For FPS Debugging
 
@@ -30,7 +31,10 @@ public class FrameControlLoop extends Thread {
             initialTime = currentTime;
 
             if (timeCounterMs >= timeFrame) {
-                updater.run();
+                if (!isPause) {
+                    updater.run();
+                }
+
                 if (CONSOLE_VIEW) {
                     System.out.println("Frame: " + frame);
                     System.out.println("FPS: " + FPS);
@@ -59,5 +63,19 @@ public class FrameControlLoop extends Thread {
 
     void toggleLoopState() {
         isRunning = !isRunning;
+    }
+
+    void togglePause() {
+        isPause = !isPause;
+    }
+
+    void decreaseSpeed() {
+        timeFrame = timeFrame + 3;
+        System.out.println("new FPS: " + 1000 / timeFrame);
+    }
+
+    void increaseSpeed() {
+        timeFrame = Math.max(timeFrame - 3, 10);
+        System.out.println("new FPS: " + 1000 / timeFrame);
     }
 }

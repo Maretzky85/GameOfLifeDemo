@@ -4,7 +4,7 @@ public class Dot {
 
     private boolean alive = true;
 
-    private int generation = 1;
+    private int generation = 0;
 
     @Override
     public String toString() {

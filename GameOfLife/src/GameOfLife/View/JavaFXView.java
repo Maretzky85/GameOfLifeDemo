@@ -1,21 +1,30 @@
 package GameOfLife.View;
 
+import GameOfLife.Controller.Controller;
 import GameOfLife.Model.Board;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import static GameOfLife.Common.Config.*;
 
-public class JavaFXView extends AbstractView {
+public class JavaFXView implements ViewInterface {
 
     private Group group = new Group();
     private Scene scene = new Scene(group, WIDTH, HEIGHT);
+    private InputHandler inputHandler = new InputHandler();
+    private Stage primaryStage;
 
     @Override
     public void viewInit() {
+        scene.setOnKeyPressed(this::handleKeyboard);
 
+        scene.setOnMousePressed(this::handleClick);
         System.out.println("JavaFX: Initialising Scene.");
 
         Stage primaryStage = new Stage();
@@ -46,24 +55,50 @@ public class JavaFXView extends AbstractView {
         System.out.println("JavaFX: Preparing window took " + (System.currentTimeMillis() - startTime) + " ms");
     }
 
+    private void handleClick(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            int gridXposition = (int) (event.getX() - RECTANGLE_WIDTH / 2) / RECTANGLE_WIDTH;
+            int gridYposition = (int) (event.getY() - RECTANGLE_HEIGHT / 2) / RECTANGLE_HEIGHT;
+            Rectangle rectangle = (Rectangle) (group.getChildren().get(gridYposition * X_SIZE + gridXposition));
+            if (rectangle.getFill().equals(Color.WHITE)) {
+                rectangle.setFill(DEAD_COLOR);
+            } else {
+                rectangle.setFill(Color.WHITE);
+            }
+
+            inputHandler.toggleDotInModel(gridXposition, gridYposition);
+        } else if (event.getButton() == MouseButton.MIDDLE) {
+            int gridXposition = (int) (event.getX() - RECTANGLE_WIDTH / 2) / RECTANGLE_WIDTH;
+            int gridYposition = (int) (event.getY() - RECTANGLE_HEIGHT / 2) / RECTANGLE_HEIGHT;
+            Rectangle rectangle = (Rectangle) (group.getChildren().get(gridYposition * X_SIZE + gridXposition));
+            System.out.println(rectangle);
+        } else if (event.getButton() == MouseButton.SECONDARY) {
+            inputHandler.requestGamePause();
+        }
+    }
+
+    private void handleKeyboard(KeyEvent event) {
+        inputHandler.handleKeyboardInput(event);
+    }
+
     @Override
     public void refresh(Board board) {
         for (int i = 0 ; i < Y_SIZE ; i++){
             for (int j = 0 ; j < X_SIZE ; j++) {
                 Rectangle rectangle = (Rectangle) (group.getChildren().get(i * X_SIZE + j));
                 if (board.getBoard()[i][j] != null) {
-                    if (!rectangle.getFill().equals(SECOND_COLOR)) {
-                        if (rectangle.getFill().equals(ALIVE_COLOR)) {
-                            rectangle.setFill(SECOND_COLOR);
-                        } else {
-                            rectangle.setFill(ALIVE_COLOR);
-                        }
-                    }
-
+                    int generationColor = Math.max(255 - board.getBoard()[i][j].getGeneration() * 40, 0);
+                    rectangle.setFill(Color.rgb(255, generationColor, 0));
                 } else {
                     rectangle.setFill(DEAD_COLOR);
                 }
             }
         }
     }
+
+    @Override
+    public void attachObserver(Controller controller) {
+        inputHandler.addObserver(controller);
+    }
+
 }
