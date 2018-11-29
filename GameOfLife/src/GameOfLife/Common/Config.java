@@ -14,8 +14,8 @@ public class Config {
      * X_SIZE and Y_SIZE - size of grid for GameOfLife.GameOfLife board
      * FRAME_RATE - how many generations to render in one second
      */
-    public static int X_SIZE = 200;
-    public static int Y_SIZE = 200;
+    public static int X_SIZE = 50;
+    public static int Y_SIZE = 30;
     public static int FRAME_RATE = 20;
 
 
@@ -33,6 +33,7 @@ public class Config {
 
 
     /**
+     * DO NOT EDIT!!!!
      * configuration for matching JavaFX Window for board size
      * if window width and heigth are not dividable by board size
      * window size cannot be smaller than board size

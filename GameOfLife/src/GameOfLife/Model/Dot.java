@@ -4,20 +4,19 @@ public class Dot {
 
     private boolean alive = true;
 
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void toggleStatus() {
-        alive = !alive;
-    }
+    private int generation = 1;
 
     @Override
     public String toString() {
         if (alive) {
-            return " * ";
+            return "*";
         } else {
-            return "   ";
+            return " ";
         }
+    }
+
+    public int getGeneration() {
+        generation++;
+        return generation;
     }
 }

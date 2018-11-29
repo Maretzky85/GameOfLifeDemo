@@ -41,7 +41,6 @@ public class Board {
         int xLength = board[0].length;
         int yLength = board.length;
         return new Dot[yLength][xLength];
-
     }
 
     private int getNeighbors(int y, int x) {

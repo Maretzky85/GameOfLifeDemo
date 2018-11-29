@@ -24,7 +24,7 @@ public class ConsoleView extends AbstractView {
                 if (board.getBoard()[i][j] == null) {
                     System.out.print("-");
                 } else {
-                    System.out.print("*");
+                    System.out.print(board.getBoard()[i][j]);
                 }
 
             }
